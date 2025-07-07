@@ -1,0 +1,15 @@
+# Build output
+/target/
+/build/
+
+# IDE files
+.idea/
+*.iml
+*.iws
+.vscode/
+
+# Log files
+*.log
+
+# Dependency management
+.mvn/
