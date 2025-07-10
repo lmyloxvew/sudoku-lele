@@ -24,15 +24,11 @@ public class Cell {
     // 深拷贝单元格
     @Override
     public Cell clone() {
-        try {
-            Cell newCell = (Cell) super.clone();
-            if (this.candidates != null) {
-                newCell.candidates = new HashSet<>(this.candidates);
-            }
-            return newCell;
-        } catch (CloneNotSupportedException e) {
-            throw new AssertionError();
+        Set<Integer> clonedCandidates = null;
+        if (this.candidates != null) {
+            clonedCandidates = new HashSet<>(this.candidates);
         }
+        return new Cell(this.row, this.col, this.value, this.isGiven, clonedCandidates);
     }
 
 }

@@ -10,6 +10,12 @@ public interface GameServer {
 
     // 创建新游戏
     Game getNewGame();
+    
+    // 从URL创建新游戏
+    Game getNewGameFromUrl(String url) throws Exception;
+    
+    // 从字符串创建新游戏
+    Game getNewGameFromString(String puzzleString);
 
     // 提交走子
     MoveResponse move(Integer gameId, Move move);

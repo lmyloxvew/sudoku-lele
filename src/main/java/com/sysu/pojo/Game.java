@@ -37,9 +37,26 @@ public class Game {
      */
     public boolean makeMove(Move move) {
         // 验证逻辑 (例如: 不能修改初始给定的数字)
-        // TODO: 其他验证逻辑有待补充
         Cell cell = grid.getCell(move.getRow(), move.getCol());
         if (cell.isGiven()) {
+            return false;
+        }
+
+        // 如果是清除操作（value为0或null）
+        if (move.getValue() == null || move.getValue() == 0) {
+            move.setPreviousValue(cell.getValue());
+            cell.setValue(0);
+            moveHistory.push(move);
+            redoHistory.clear();
+            
+            // 更新所有候选数
+            grid.updateAllCandidates();
+            updateStatus();
+            return true;
+        }
+
+        // 验证移动是否合法
+        if (!grid.isValidMove(move.getRow(), move.getCol(), move.getValue())) {
             return false;
         }
 
@@ -49,10 +66,24 @@ public class Game {
         moveHistory.push(move);
         redoHistory.clear(); // 新操作会清空重做历史
 
-        // 更新游戏状态 (例如: 检查是否已解决)
-        // TODO: 待实现方法
-        // updateStatus();
+        // 更新候选数和游戏状态
+        grid.updateAllCandidates();
+        updateStatus();
         return true;
+    }
+
+    /**
+     * 更新游戏状态
+     */
+    private void updateStatus() {
+        if (grid.hasConflicts()) {
+            this.status = GameStatus.FAILED;
+        } else if (grid.isCompleted()) {
+            this.status = GameStatus.SOLVED;
+            this.endTime = LocalDateTime.now();
+        } else {
+            this.status = GameStatus.IN_PROGRESS;
+        }
     }
 
     /**
@@ -64,6 +95,10 @@ public class Game {
             // 恢复单元格到上一个值
             grid.getCell(lastMove.getRow(), lastMove.getCol()).setValue(lastMove.getPreviousValue());
             redoHistory.push(lastMove);
+            
+            // 更新候选数和游戏状态
+            grid.updateAllCandidates();
+            updateStatus();
             return true;
         } else {
             return false;
@@ -84,6 +119,10 @@ public class Game {
 
             // 3. 将操作重新放回undo历史记录中
             moveHistory.push(moveToRedo);
+
+            // 4. 更新候选数和游戏状态
+            grid.updateAllCandidates();
+            updateStatus();
 
             return true;
         } else {
