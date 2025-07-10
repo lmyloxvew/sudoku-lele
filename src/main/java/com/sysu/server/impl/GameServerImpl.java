@@ -3,6 +3,8 @@ package com.sysu.server.impl;
 import com.sysu.dao.InMemoryGameRepository;
 import com.sysu.pojo.*;
 import com.sysu.server.GameServer;
+import com.sysu.service.PuzzleImportService;
+import com.sysu.strategy.StrategyManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,12 @@ public class GameServerImpl implements GameServer {
 
     @Autowired
     InMemoryGameRepository inMemoryGameRepository;
+    
+    @Autowired
+    StrategyManager strategyManager;
+    
+    @Autowired
+    PuzzleImportService puzzleImportService;
 
     @Override
     public Game getNewGame() {
@@ -32,6 +40,35 @@ public class GameServerImpl implements GameServer {
         inMemoryGameRepository.save(new Game(gameId, grid, status, new Stack<>(), new Stack<>(), LocalDateTime.now(), null));
 
         return inMemoryGameRepository.findById(gameId).isPresent() ? inMemoryGameRepository.findById(gameId).get() : null;
+    }
+    
+    @Override
+    public Game getNewGameFromUrl(String url) throws Exception {
+        // 从URL导入谜题字符串
+        String puzzleString = puzzleImportService.importFromSudokuWikiUrl(url);
+        return createGameFromPuzzleString(puzzleString);
+    }
+    
+    @Override
+    public Game getNewGameFromString(String puzzleString) {
+        // 验证并导入谜题字符串
+        String validatedPuzzleString = puzzleImportService.importFromString(puzzleString);
+        return createGameFromPuzzleString(validatedPuzzleString);
+    }
+    
+    /**
+     * 从谜题字符串创建游戏
+     */
+    private Game createGameFromPuzzleString(String puzzleString) {
+        // 构造需要创建Game对象的元素
+        int gameId = Game.id++;
+        SudokuGrid grid = new SudokuGrid(puzzleString);
+        GameStatus status = GameStatus.IN_PROGRESS;
+        
+        Game game = new Game(gameId, grid, status, new Stack<>(), new Stack<>(), LocalDateTime.now(), null);
+        inMemoryGameRepository.save(game);
+        
+        return inMemoryGameRepository.findById(gameId).orElse(null);
     }
 
     /**
@@ -77,12 +114,16 @@ public class GameServerImpl implements GameServer {
     }
 
     /**
-     * 重做操作
-     * TODO: 获取下一步提示，需要在Game类中实现相应方法
+     * 获取下一步提示
      */
     @Override
     public Hint getHint(Integer gameId) {
-        return null;
+        Game game = inMemoryGameRepository.findById(gameId).orElse(null);
+        if (game == null) {
+            return null;
+        }
+        
+        return strategyManager.getHint(game.getGrid());
     }
 
 }
