@@ -44,6 +44,11 @@ public class SudokuGrid implements Cloneable {
      * @return 是否合法
      */
     public boolean isValidMove(int row, int col, int value) {
+        // 输入验证
+        if (row < 0 || row >= 9 || col < 0 || col >= 9) {
+            throw new IndexOutOfBoundsException("行列坐标必须在0-8范围内，当前: (" + row + "," + col + ")");
+        }
+        
         if (value < 1 || value > 9) {
             return false;
         }

@@ -66,13 +66,14 @@ public class SudokuGridTest {
         boolean result = grid.isValidMove(0, 0, 4);
         System.out.println("断言前 isValidMove(0,0,4) = " + result);
         assertTrue(result); // 在空格位置填入4应该有效
-        assertTrue(grid.isValidMove(0, 0, 8)); // 在空格位置填入8应该有效
+        assertTrue(grid.isValidMove(0, 0, 5)); // 在空格位置填入5应该有效（第0列没有5）
         
         // 测试无效移动（行冲突）
         assertFalse(grid.isValidMove(0, 0, 3)); // 第0行已经有3了
         
         // 测试无效移动（列冲突）
         assertFalse(grid.isValidMove(0, 0, 9)); // 第0列已经有9了
+        assertFalse(grid.isValidMove(0, 0, 8)); // 第0列已经有8了
         
         // 测试无效移动（九宫格冲突）
         assertFalse(grid.isValidMove(1, 1, 9)); // 左上九宫格已经有9了
