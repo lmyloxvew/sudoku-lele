@@ -95,7 +95,11 @@ public class GameController {
 
         MoveResponse mr = gameServer.move(gameId, move);
 
-        return Result.success(mr);
+        if (mr.isValidMove == false) {
+            return Result.error("请重新输入");
+        } else {
+            return Result.success(mr);
+        }
     }
 
     /**
@@ -125,8 +129,8 @@ public class GameController {
     /**
      * 重置游戏到初始状态
      */
-    @PostMapping("/{gameId}/reset")
-    public Result resetGame(@PathVariable("gameId") Integer gameId) {
+    @PostMapping("/{gameId}/restart")
+    public Result restartGame(@PathVariable("gameId") Integer gameId) {
         log.info("reset game to initial state");
 
         MoveResponse mr = gameServer.resetGame(gameId);
