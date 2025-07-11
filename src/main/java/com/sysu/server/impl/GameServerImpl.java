@@ -116,6 +116,20 @@ public class GameServerImpl implements GameServer {
     }
 
     /**
+     * 重置游戏到初始状态
+     */
+    @Override
+    public MoveResponse resetGame(Integer gameId) {
+        Game game = inMemoryGameRepository.findById(gameId)
+                .orElseThrow(() -> new NoSuchElementException("游戏不存在，ID: " + gameId));
+
+        game.resetToInitialState();
+
+        inMemoryGameRepository.save(game);
+        return new MoveResponse(true, game.getGrid(), game.getStatus());
+    }
+
+    /**
      * 获取下一步提示
      */
     @Override

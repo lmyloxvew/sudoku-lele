@@ -131,7 +131,26 @@ Test-Api "重做移动" "$BaseUrl/api/games/$gameId/redo" "POST"
 
 Write-Host ""
 
-# 5. 测试提示功能
+# 5. 测试重置功能
+Write-Host "🔄 测试重置功能" -ForegroundColor Yellow
+Write-Host "===============" -ForegroundColor Yellow
+
+# 先进行几步移动
+$anotherMove = @{
+    row = 0
+    col = 1
+    value = 5
+} | ConvertTo-Json
+
+Test-Api "进行额外移动" "$BaseUrl/api/games/$gameId/cell" "PUT" $anotherMove
+Test-Api "重置游戏到初始状态" "$BaseUrl/api/games/$gameId/reset" "POST"
+
+# 验证重置后可以再次进行相同移动
+Test-Api "验证重置成功(重新进行移动)" "$BaseUrl/api/games/$gameId/cell" "PUT" $validMove
+
+Write-Host ""
+
+# 6. 测试提示功能
 Write-Host "💡 测试提示功能" -ForegroundColor Yellow
 Write-Host "===============" -ForegroundColor Yellow
 
