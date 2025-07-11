@@ -1,4 +1,4 @@
-# 数独乐乐 (Sudoku-LeLe)
+# 数独乐乐 (Sudoku-LeLe) version 1.0
 
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
