@@ -36,6 +36,15 @@ public class Game {
      * @return 操作是否合法
      */
     public boolean makeMove(Move move) {
+        // 输入验证
+        if (move == null) {
+            throw new IllegalArgumentException("移动操作不能为空");
+        }
+        
+        if (move.getRow() < 0 || move.getRow() >= 9 || move.getCol() < 0 || move.getCol() >= 9) {
+            throw new IndexOutOfBoundsException("坐标超出范围: (" + move.getRow() + "," + move.getCol() + ")");
+        }
+        
         // 验证逻辑 (例如: 不能修改初始给定的数字)
         Cell cell = grid.getCell(move.getRow(), move.getCol());
         if (cell.isGiven()) {
