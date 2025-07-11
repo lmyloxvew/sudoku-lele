@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MoveResponse {
-    private boolean isValidMove;
+    public boolean isValidMove;
     private SudokuGrid grid;
     private GameStatus status;
 }

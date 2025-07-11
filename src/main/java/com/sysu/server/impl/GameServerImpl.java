@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Stack;
+import java.util.NoSuchElementException;
 
 @Service
 public class GameServerImpl implements GameServer {
@@ -73,11 +74,11 @@ public class GameServerImpl implements GameServer {
 
     /**
      * 提交走子
-     * TODO: get方法有获取空game的风险
      */
     @Override
     public MoveResponse move(Integer gameId, Move move) {
-        Game game = inMemoryGameRepository.findById(gameId).get();
+        Game game = inMemoryGameRepository.findById(gameId)
+                .orElseThrow(() -> new NoSuchElementException("游戏不存在，ID: " + gameId));
 
         boolean isValid = game.makeMove(move);
 
@@ -88,11 +89,11 @@ public class GameServerImpl implements GameServer {
 
     /**
      * 撤销操作
-     * TODO: 与提交走子操作一样，需要全局异常处理器来处理异常
      */
     @Override
     public MoveResponse undoMove(Integer gameId) {
-        Game game = inMemoryGameRepository.findById(gameId).get();
+        Game game = inMemoryGameRepository.findById(gameId)
+                .orElseThrow(() -> new NoSuchElementException("游戏不存在，ID: " + gameId));
 
         boolean isNotEmpty = game.undoMove();
 
@@ -105,12 +106,27 @@ public class GameServerImpl implements GameServer {
      */
     @Override
     public MoveResponse redoMove(Integer gameId) {
-        Game game = inMemoryGameRepository.findById(gameId).get();
+        Game game = inMemoryGameRepository.findById(gameId)
+                .orElseThrow(() -> new NoSuchElementException("游戏不存在，ID: " + gameId));
 
         boolean isNotEmpty = game.redoMove();
 
         inMemoryGameRepository.save(game);
         return new MoveResponse(isNotEmpty, game.getGrid(), game.getStatus());
+    }
+
+    /**
+     * 重置游戏到初始状态
+     */
+    @Override
+    public MoveResponse resetGame(Integer gameId) {
+        Game game = inMemoryGameRepository.findById(gameId)
+                .orElseThrow(() -> new NoSuchElementException("游戏不存在，ID: " + gameId));
+
+        game.resetToInitialState();
+
+        inMemoryGameRepository.save(game);
+        return new MoveResponse(true, game.getGrid(), game.getStatus());
     }
 
     /**

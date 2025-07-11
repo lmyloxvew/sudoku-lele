@@ -20,6 +20,7 @@ public class Game {
 
     private Integer gameId; // 游戏唯一标识符
     private SudokuGrid grid; // 玩家操作的当前布局
+    private SudokuGrid initialGrid; // 初始棋盘状态（用于重置）
     private GameStatus status; // 游戏状态 (进行中, 已解决等)
 
     // 使用栈来实现操作历史，用于撤销和重做
@@ -29,6 +30,41 @@ public class Game {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 
+    // 兼容性构造函数
+    public Game(Integer gameId, SudokuGrid grid, GameStatus status, Stack<Move> moveHistory, Stack<Move> redoHistory, LocalDateTime startTime, LocalDateTime endTime) {
+        this.gameId = gameId;
+        this.grid = grid;
+        this.initialGrid = grid.clone(); // 保存初始状态的深拷贝
+        this.status = status;
+        this.moveHistory = moveHistory;
+        this.redoHistory = redoHistory;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
+
+    /**
+     * 重置游戏到初始状态
+     * 清除所有玩家的移动，恢复到谜题的原始状态
+     */
+    public void resetToInitialState() {
+        if (initialGrid == null) {
+            throw new IllegalStateException("初始棋盘状态未保存，无法重置");
+        }
+        
+        // 恢复棋盘到初始状态
+        this.grid = initialGrid.clone();
+        
+        // 清空移动历史
+        this.moveHistory.clear();
+        this.redoHistory.clear();
+        
+        // 重置游戏状态
+        this.status = GameStatus.IN_PROGRESS;
+        this.endTime = null;
+        
+        // 更新候选数
+        this.grid.updateAllCandidates();
+    }
 
     /**
      * 执行一步操作
@@ -36,6 +72,15 @@ public class Game {
      * @return 操作是否合法
      */
     public boolean makeMove(Move move) {
+        // 输入验证
+        if (move == null) {
+            throw new IllegalArgumentException("移动操作不能为空");
+        }
+        
+        if (move.getRow() < 0 || move.getRow() >= 9 || move.getCol() < 0 || move.getCol() >= 9) {
+            throw new IndexOutOfBoundsException("坐标超出范围: (" + move.getRow() + "," + move.getCol() + ")");
+        }
+        
         // 验证逻辑 (例如: 不能修改初始给定的数字)
         Cell cell = grid.getCell(move.getRow(), move.getCol());
         if (cell.isGiven()) {

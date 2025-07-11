@@ -26,6 +26,9 @@ public interface GameServer {
     // 重做操作
     MoveResponse redoMove(Integer gameId);
 
+    // 重置游戏到初始状态
+    MoveResponse resetGame(Integer gameId);
+
     // 获取下一步提示
     Hint getHint(Integer gameId);
 }

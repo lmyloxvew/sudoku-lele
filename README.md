@@ -1,4 +1,4 @@
-# 数独乐乐 (Sudoku-LeLe)
+# 数独乐乐 (Sudoku-LeLe) version 1.0
 
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -50,11 +50,14 @@
 
 本项目采用前后端分离架构，后端提供以下核心RESTful API：
 
-- `POST /api/games`: 创建一局新游戏。
+- `GET /api/games`: 创建一局新游戏（使用默认谜题）。
+- `POST /api/games/import-string`: 从81位字符串创建新游戏。
+- `POST /api/games/import-url`: 从SudokuWiki URL创建新游戏。
 - `PUT /api/games/{gameId}/cell`: 提交一步操作（填写/清除数字）。
-- `GET /api/games/{gameId}/hint`: 获取下一步提示。
 - `POST /api/games/{gameId}/undo`: 撤销上一步操作。
 - `POST /api/games/{gameId}/redo`: 重做已撤销的操作。
+- `POST /api/games/{gameId}/reset`: 重置游戏到初始状态。
+- `GET /api/games/{gameId}/hint`: 获取下一步提示。
 
 ## 🤝 如何贡献
 

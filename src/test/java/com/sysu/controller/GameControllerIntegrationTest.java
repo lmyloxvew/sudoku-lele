@@ -187,6 +187,48 @@ public class GameControllerIntegrationTest {
     }
 
     @Test
+    public void testResetGame() throws Exception {
+        // 创建游戏，进行多步移动，然后重置
+        String gameResponse = mockMvc.perform(get("/api/games"))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        ObjectMapper mapper = new ObjectMapper();
+        var responseNode = mapper.readTree(gameResponse);
+        int gameId = responseNode.get("data").get("gameId").asInt();
+
+        // 进行几步移动
+        Move move1 = new Move(0, 0, 4, null);
+        mockMvc.perform(put("/api/games/" + gameId + "/cell")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(move1)))
+                .andExpect(status().isOk());
+
+        Move move2 = new Move(0, 1, 5, null);
+        mockMvc.perform(put("/api/games/" + gameId + "/cell")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(move2)))
+                .andExpect(status().isOk());
+
+        // 重置游戏
+        mockMvc.perform(post("/api/games/" + gameId + "/reset"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(1))
+                .andExpect(jsonPath("$.data.validMove").value(true))
+                .andExpect(jsonPath("$.data.status").value("IN_PROGRESS"));
+
+        // 验证游戏确实重置了 - 检查(0,0)位置是否恢复到空
+        // 这里我们可以通过再次尝试相同的移动来验证
+        mockMvc.perform(put("/api/games/" + gameId + "/cell")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(move1)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.validMove").value(true)); // 应该能再次成功移动
+    }
+
+    @Test
     public void testGetHint() throws Exception {
         // 创建游戏
         String gameResponse = mockMvc.perform(get("/api/games"))
