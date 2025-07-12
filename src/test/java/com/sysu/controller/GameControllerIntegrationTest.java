@@ -245,13 +245,13 @@ public class GameControllerIntegrationTest {
         mockMvc.perform(get("/api/games/" + gameId + "/hint"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(1));
-                // 注意：提示可能为null，取决于当前谜题状态
+        // 注意：提示可能为null，取决于当前谜题状态
     }
 
     @Test
     public void testGameStateProgression() throws Exception {
         // 测试游戏状态的完整流程
-        
+
         // 1. 创建一个接近完成的游戏
         GameController.StringImportRequest request = new GameController.StringImportRequest();
         request.setPuzzleString("483921657967345821251876493548132976729564138136798245372689514814253769695417300");

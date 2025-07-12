@@ -15,6 +15,7 @@ public class InMemoryGameRepository {
 
     /**
      * 保存一个新的或更新一个已存在的Game对象。
+     *
      * @param game 要存储的游戏对象
      */
     public void save(Game game) {
@@ -25,6 +26,7 @@ public class InMemoryGameRepository {
 
     /**
      * 利用 gameId 来寻找指定的Game对象。
+     *
      * @param gameId 游戏的唯一ID
      * @return 如果找到，则返回一个包含Game对象的Optional；否则返回空的Optional。
      */
@@ -34,6 +36,7 @@ public class InMemoryGameRepository {
 
     /**
      * 根据ID删除一个游戏（例如，游戏结束后清理）
+     *
      * @param gameId 游戏ID
      */
     public void deleteById(int gameId) {

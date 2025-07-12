@@ -29,32 +29,32 @@ public class NakedSingleStrategy implements SudokuStrategy {
         for (int row = 0; row < 9; row++) {
             for (int col = 0; col < 9; col++) {
                 Cell cell = grid.getCell(row, col);
-                
+
                 // 如果格子为空且只有一个候选数
-                if ((cell.getValue() == null || cell.getValue() == 0) && 
-                    cell.getCandidates() != null && 
-                    cell.getCandidates().size() == 1) {
-                    
+                if ((cell.getValue() == null || cell.getValue() == 0) &&
+                        cell.getCandidates() != null &&
+                        cell.getCandidates().size() == 1) {
+
                     int value = cell.getCandidates().iterator().next();
-                    
+
                     // 构造提示信息
                     List<Hint.CellPosition> primaryCells = Arrays.asList(
-                        new Hint.CellPosition(row, col)
+                            new Hint.CellPosition(row, col)
                     );
-                    
+
                     Move suggestedMove = new Move(row, col, value, cell.getValue());
-                    
+
                     String description = String.format(
-                        "位置 (%d,%d) 只有一个可能的候选数 %d，因此这就是答案。",
-                        row + 1, col + 1, value
+                            "位置 (%d,%d) 只有一个可能的候选数 %d，因此这就是答案。",
+                            row + 1, col + 1, value
                     );
-                    
+
                     return new Hint(
-                        getStrategyName(),
-                        description,
-                        primaryCells,
-                        suggestedMove,
-                        new HashMap<>() // Naked Single不需要消除候选数
+                            getStrategyName(),
+                            description,
+                            primaryCells,
+                            suggestedMove,
+                            new HashMap<>() // Naked Single不需要消除候选数
                     );
                 }
             }

@@ -16,7 +16,7 @@ import java.util.Stack;
 @NoArgsConstructor
 public class Game {
 
-    public static Integer id = 0;
+    public static java.util.concurrent.atomic.AtomicInteger idGenerator = new java.util.concurrent.atomic.AtomicInteger(0);
 
     private Integer gameId; // 游戏唯一标识符
     private SudokuGrid grid; // 玩家操作的当前布局

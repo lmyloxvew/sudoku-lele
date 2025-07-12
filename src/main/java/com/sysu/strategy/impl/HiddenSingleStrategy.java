@@ -29,15 +29,15 @@ public class HiddenSingleStrategy implements SudokuStrategy {
         // 检查行中的隐性唯一
         Hint hint = checkRows(grid);
         if (hint != null) return hint;
-        
+
         // 检查列中的隐性唯一
         hint = checkColumns(grid);
         if (hint != null) return hint;
-        
+
         // 检查九宫格中的隐性唯一
         hint = checkBoxes(grid);
         if (hint != null) return hint;
-        
+
         return null;
     }
 
@@ -45,17 +45,17 @@ public class HiddenSingleStrategy implements SudokuStrategy {
         for (int row = 0; row < 9; row++) {
             for (int num = 1; num <= 9; num++) {
                 List<Integer> possibleCols = new ArrayList<>();
-                
+
                 // 找到这个数字在当前行的所有可能位置
                 for (int col = 0; col < 9; col++) {
                     Cell cell = grid.getCell(row, col);
                     if ((cell.getValue() == null || cell.getValue() == 0) &&
-                        cell.getCandidates() != null &&
-                        cell.getCandidates().contains(num)) {
+                            cell.getCandidates() != null &&
+                            cell.getCandidates().contains(num)) {
                         possibleCols.add(col);
                     }
                 }
-                
+
                 // 如果只有一个可能位置
                 if (possibleCols.size() == 1) {
                     int col = possibleCols.get(0);
@@ -70,17 +70,17 @@ public class HiddenSingleStrategy implements SudokuStrategy {
         for (int col = 0; col < 9; col++) {
             for (int num = 1; num <= 9; num++) {
                 List<Integer> possibleRows = new ArrayList<>();
-                
+
                 // 找到这个数字在当前列的所有可能位置
                 for (int row = 0; row < 9; row++) {
                     Cell cell = grid.getCell(row, col);
                     if ((cell.getValue() == null || cell.getValue() == 0) &&
-                        cell.getCandidates() != null &&
-                        cell.getCandidates().contains(num)) {
+                            cell.getCandidates() != null &&
+                            cell.getCandidates().contains(num)) {
                         possibleRows.add(row);
                     }
                 }
-                
+
                 // 如果只有一个可能位置
                 if (possibleRows.size() == 1) {
                     int row = possibleRows.get(0);
@@ -96,19 +96,19 @@ public class HiddenSingleStrategy implements SudokuStrategy {
             for (int boxCol = 0; boxCol < 3; boxCol++) {
                 for (int num = 1; num <= 9; num++) {
                     List<Hint.CellPosition> possiblePositions = new ArrayList<>();
-                    
+
                     // 找到这个数字在当前九宫格的所有可能位置
                     for (int row = boxRow * 3; row < boxRow * 3 + 3; row++) {
                         for (int col = boxCol * 3; col < boxCol * 3 + 3; col++) {
                             Cell cell = grid.getCell(row, col);
                             if ((cell.getValue() == null || cell.getValue() == 0) &&
-                                cell.getCandidates() != null &&
-                                cell.getCandidates().contains(num)) {
+                                    cell.getCandidates() != null &&
+                                    cell.getCandidates().contains(num)) {
                                 possiblePositions.add(new Hint.CellPosition(row, col));
                             }
                         }
                     }
-                    
+
                     // 如果只有一个可能位置
                     if (possiblePositions.size() == 1) {
                         Hint.CellPosition pos = possiblePositions.get(0);
@@ -122,25 +122,25 @@ public class HiddenSingleStrategy implements SudokuStrategy {
 
     private Hint createHint(SudokuGrid grid, int row, int col, int num, String region) {
         Cell cell = grid.getCell(row, col);
-        
+
         List<Hint.CellPosition> primaryCells = Arrays.asList(
-            new Hint.CellPosition(row, col)
+                new Hint.CellPosition(row, col)
         );
-        
+
         Move suggestedMove = new Move(row, col, num, cell.getValue());
-        
+
         String description = String.format(
-            "数字 %d 在第 %d %s中只能放在位置 (%d,%d)，因此这就是答案。",
-            num, region.equals("行") ? row + 1 : (region.equals("列") ? col + 1 : ((row/3)*3 + (col/3) + 1)), 
-            region, row + 1, col + 1
+                "数字 %d 在第 %d %s中只能放在位置 (%d,%d)，因此这就是答案。",
+                num, region.equals("行") ? row + 1 : (region.equals("列") ? col + 1 : ((row / 3) * 3 + (col / 3) + 1)),
+                region, row + 1, col + 1
         );
-        
+
         return new Hint(
-            getStrategyName(),
-            description,
-            primaryCells,
-            suggestedMove,
-            new HashMap<>()
+                getStrategyName(),
+                description,
+                primaryCells,
+                suggestedMove,
+                new HashMap<>()
         );
     }
 

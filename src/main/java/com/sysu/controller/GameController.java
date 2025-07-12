@@ -30,14 +30,14 @@ public class GameController {
             return Result.error("this game isn't exist");
         }
     }
-    
+
     /*
     从URL创建新游戏
      */
     @PostMapping("/import-url")
     public Result startGameFromUrl(@RequestBody UrlImportRequest request) {
         log.info("start game from url: {}", request.getUrl());
-        
+
         try {
             Game newGame = gameServer.getNewGameFromUrl(request.getUrl());
             if (newGame != null) {
@@ -50,14 +50,14 @@ public class GameController {
             return Result.error("导入失败: " + e.getMessage());
         }
     }
-    
+
     /*
     从字符串创建新游戏
      */
     @PostMapping("/import-string")
     public Result startGameFromString(@RequestBody StringImportRequest request) {
         log.info("start game from string");
-        
+
         try {
             Game newGame = gameServer.getNewGameFromString(request.getPuzzleString());
             if (newGame != null) {
@@ -70,20 +70,30 @@ public class GameController {
             return Result.error("导入失败: " + e.getMessage());
         }
     }
-    
+
     // 内部类用于接收请求参数
     public static class UrlImportRequest {
         private String url;
-        
-        public String getUrl() { return url; }
-        public void setUrl(String url) { this.url = url; }
+
+        public String getUrl() {
+            return url;
+        }
+
+        public void setUrl(String url) {
+            this.url = url;
+        }
     }
-    
+
     public static class StringImportRequest {
         private String puzzleString;
-        
-        public String getPuzzleString() { return puzzleString; }
-        public void setPuzzleString(String puzzleString) { this.puzzleString = puzzleString; }
+
+        public String getPuzzleString() {
+            return puzzleString;
+        }
+
+        public void setPuzzleString(String puzzleString) {
+            this.puzzleString = puzzleString;
+        }
     }
 
     /*
@@ -129,7 +139,7 @@ public class GameController {
     /**
      * 重置游戏到初始状态
      */
-    @PostMapping("/{gameId}/restart")
+    @PostMapping("/{gameId}/reset")
     public Result restartGame(@PathVariable("gameId") Integer gameId) {
         log.info("reset game to initial state");
 
