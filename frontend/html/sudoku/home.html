@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数独乐乐 - 主页</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4efe9 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #2c3e50;
+            position: relative;
+        }
+        
+        .container {
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            padding: 30px;
+            position: relative;
+        }
+        
+        .button {
+            display: flex;
+            align-items: center;
+            padding: 15px 25px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 600;
+            border: none;
+            margin: 15px 0;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+            text-align: left;
+        }
+        
+        .button:hover {
+            background-color: #2980b9;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(52, 152, 219, 0.4);
+        }
+
+        .button.url-import {
+            background: #9b59b6;
+        }
+        
+        .button.url-import:hover {
+            background: #8e44ad;
+        }
+        
+        .button-content {
+            flex: 1;
+        }
+        
+        .button-icon {
+            font-size: 32px;
+            margin-right: 15px;
+            width: 40px;
+            text-align: center;
+        }
+        
+        .button-title {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+        
+        .button-description {
+            font-size: 14px;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        .external-link-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #9b59b6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 8px rgba(155, 89, 182, 0.2);
+            font-weight: 600;
+            z-index: 10;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .external-link-btn:hover {
+            background: #8e44ad;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(155, 89, 182, 0.3);
+        }
+
+        header {
+            margin-bottom: 25px;
+            position: relative;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin: 10px 0;
+            color: #2c3e50;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1::after {
+            content: '';
+            display: block;
+            width: 70px;
+            height: 5px;
+            background: linear-gradient(to right, #3498db, #2ecc71);
+            margin: 10px auto;
+            border-radius: 5px;
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+        
+        .buttons-container {
+            margin: 20px 0;
+        }
+        
+        @media (max-width: 500px) {
+            .container {
+                padding: 25px 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .button {
+                padding: 12px 20px;
+                font-size: 16px;
+            }
+            
+            .button-title {
+                font-size: 18px;
+            }
+            
+            .button-icon {
+                font-size: 28px;
+                margin-right: 12px;
+            }
+            
+            .external-link-btn {
+                padding: 8px 15px;
+                font-size: 0.8rem;
+                top: 15px;
+                right: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="https://www.sudokuwiki.org/Sudoku.htm" target="_blank" class="external-link-btn">
+        数独解题指南
+    </a>
+    
+    <div class="container">
+        <header>
+            <h1>数独乐乐</h1>
+            <p class="subtitle">开启您的数独挑战之旅</p>
+        </header>
+        
+        <div class="buttons-container">
+            <a href="随机数独.html" class="button">
+                <div class="button-icon">🎲</div>
+                <div class="button-content">
+                    <div class="button-title">随机数独</div>
+                    <div class="button-description">体验不同难度的随机数独挑战</div>
+                </div>
+            </a>
+            
+            <a href="数独导入.html" class="button url-import">
+                <div class="button-icon">🌐</div>
+                <div class="button-content">
+                    <div class="button-title">URL导入</div>
+                    <div class="button-description">从SudokuWiki导入自定义数独</div>
+                </div>
+            </a>
+        </div>
+    </div>
+</body>
+</html>
